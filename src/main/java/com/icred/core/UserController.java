@@ -30,15 +30,34 @@ public class UserController {
 	}
 
 	
+
 	/**
-	 * GET /create --> Create a new user and save it in the database.
+	 * POST /create --> Create a new user and save it in the database.
+	 */
+	@RequestMapping(path = "/oauth/token", method = RequestMethod.POST)
+	@ResponseBody
+	public AuthObject login(@RequestParam(required = true) String username, @RequestParam(required = true) String password) {
+		
+		User foundUser = userDao.findByEmailAndPassword(username, password);
+		AuthObject auth = null; 
+		if (foundUser != null) {
+			auth = new  AuthObject("MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3", "bearer", 3600, "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk", "create");
+				
+		}
+		return auth;
+	}
+	
+	
+	
+	/**
+	 * POST /create --> Create a new user and save it in the database.
 	 */
 	@RequestMapping(path = "/user", method = RequestMethod.POST)
 	@ResponseBody
-	public String create(@RequestParam(required = true) String email) {
+	public String create(@RequestParam(required = true) String email, @RequestParam(required = true) String password) {
 		String userId = "";
 		try {
-			User user = new User(email, "");
+			User user = new User(email, "", password);
 			userDao.save(user);
 			userId = String.valueOf(user.getId());
 			user.setQrCode(generateQrCode("" + user.getId()));

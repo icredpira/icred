@@ -17,6 +17,10 @@ public interface UserDao extends CrudRepository<User, Long> {
   
   
   public User findByQrCode(String qrCode);
+
+
+
+  public User findByEmailAndPassword(String email, String password);
   
   
 

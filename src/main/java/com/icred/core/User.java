@@ -27,6 +27,10 @@ public class User {
 	
 	private String qrCode;
 	
+	
+	private String password;
+	
+	
 // Public methods
 
 	public User() {
@@ -36,9 +40,11 @@ public class User {
 		this.id = id;
 	}
 
-	public User(String email, String name) {
+	public User(String email, String name, String password) {
 		this.email = email;
 		this.name = name;
+		this.setPassword(password);
+				
 	}
 
 	public long getId() {
@@ -67,6 +73,14 @@ public class User {
 
 	public void setQrCode(String qrCode) {
 		this.qrCode = qrCode;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 
