@@ -22,42 +22,40 @@ public class UserController {
 	@Autowired
 	private TransactionDao transactionDao;
 
-	
 	@RequestMapping(path = "/tri", method = RequestMethod.GET)
 	@ResponseBody
 	public String tri() {
 		return "hello";
 	}
 
-	
-
 	/**
 	 * POST /create --> Create a new user and save it in the database.
 	 */
 	@RequestMapping(path = "/oauth/token", method = RequestMethod.POST)
 	@ResponseBody
-	public AuthObject login(@RequestParam(required = true) String username, @RequestParam(required = true) String password) {
-		
+	public AuthObject login(@RequestParam(required = true) String username,
+			@RequestParam(required = true) String password) {
+
 		User foundUser = userDao.findByEmailAndPassword(username, password);
-		AuthObject auth = null; 
+		AuthObject auth = null;
 		if (foundUser != null) {
-			auth = new  AuthObject("MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3", "bearer", 3600, "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk", "create");
-				
+			auth = new AuthObject("MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3", "bearer", 3600,
+					"IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk", "create");
+
 		}
 		return auth;
 	}
-	
-	
-	
+
 	/**
 	 * POST /create --> Create a new user and save it in the database.
 	 */
 	@RequestMapping(path = "/user", method = RequestMethod.POST)
 	@ResponseBody
-	public String create(@RequestParam(required = true) String email, @RequestParam(required = true) String password) {
+	public String create(@RequestParam(required = true) String email, @RequestParam(required = true) String password,
+			@RequestParam(required = true, defaultValue="") String username, @RequestParam(required = true, defaultValue=ICredConstants.CUSTOMER_USER) String userType) {
 		String userId = "";
 		try {
-			User user = new User(email, "", password);
+			User user = new User(email, username, password, ICredConstants.MERCHANT_USER.equals(userType) );
 			userDao.save(user);
 			userId = String.valueOf(user.getId());
 			user.setQrCode(generateQrCode("" + user.getId()));
@@ -72,6 +70,7 @@ public class UserController {
 		return "IC" + userId + java.util.UUID.randomUUID().toString();
 	}
 
+	
 	/**
 	 * GET /get-by-email --> Return the id for the user having the passed email.
 	 * 

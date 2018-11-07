@@ -33,6 +33,8 @@ public class MerchantController {
 	
 		Transaction newTransaction = transactionDao.findByQrIdAndMerchantIdAndLastTransactionPerMerchant(qrId, merchantId, true);
 		
+		User merchant = userDao.findByEmail(merchantId);
+		
 		if(newTransaction == null) {
 			newTransaction = new Transaction();
 			
@@ -44,7 +46,8 @@ public class MerchantController {
 			
 			User findByQrCode = userDao.findByQrCode(qrId);
 			
-			newTransaction.setQrId(qrId);	
+			newTransaction.setQrId(qrId);
+			newTransaction.setMerchantName(merchant.getName());
 			newTransaction.setLastTransactionPerMerchant(true);
 			newTransaction.setCreditUsed(false);
 			newTransaction.setUserId(findByQrCode.getEmail());
@@ -103,6 +106,7 @@ public class MerchantController {
         transaction.setQrId( qrId );
         transaction.setTransactionDate(new Date());
         transaction.setMerchantId(merchantId);
+        transaction.setMerchantName(currentTransaction.getMerchantName());
 //        transaction.setInitialCredit( newCredit );
         transaction.setCreditUsed(false);
         transaction.setLastTransactionPerMerchant(true);

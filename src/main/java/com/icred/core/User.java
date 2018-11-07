@@ -1,5 +1,6 @@
 package com.icred.core;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +20,7 @@ public class User {
 
 	
 	@NotNull
+	@Column(unique=true)
 	private String email;
 
 	@NotNull
@@ -27,11 +29,13 @@ public class User {
 	
 	private String qrCode;
 	
-	
+	@NotNull
 	private String password;
 	
 	
-// Public methods
+	private boolean merchant;
+	
+
 
 	public User() {
 	}
@@ -40,10 +44,11 @@ public class User {
 		this.id = id;
 	}
 
-	public User(String email, String name, String password) {
+	public User(String email, String name, String password, boolean isMerchant) {
 		this.email = email;
 		this.name = name;
-		this.setPassword(password);
+		this.password = password;
+		this.setMerchant(isMerchant);
 				
 	}
 
@@ -82,6 +87,15 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public boolean isMerchant() {
+		return merchant;
+	}
+
+	public void setMerchant(boolean merchant) {
+		this.merchant = merchant;
+	}
+
 
 
 }

@@ -25,6 +25,7 @@ public class Transaction {
     
     private String merchantId;
 
+    private String merchantName;
 
 //    /**
 //     * @var User
@@ -148,7 +149,16 @@ public class Transaction {
 	public void setDummy(boolean dummy) {
 		this.dummy = dummy;
 	}
-    
+
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
     
 
 }
