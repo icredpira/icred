@@ -66,6 +66,9 @@ public class MerchantController {
 			throws NotFoundException,Exception {
 	
 		// TODO: check user maerchant validity
+		// TODO: check parameters
+		// TODO: check last transaction
+		
 		String newCredit = null; 
 		Long newCreditLong = null; 
 		String currentCreditId = null; 
@@ -82,23 +85,6 @@ public class MerchantController {
 		
 		Transaction currentTransaction = transactionDao.findById(Long.parseLong(currentCreditId)).get(); 
 		
-		
-//        if (! $currentTransaction){
-//             $response = new Response(
-//                'Transaction not existing',
-//                Response::HTTP_BAD_REQUEST,
-//                array('content-type' => 'application/json')
-//                );
-//            return $response;
-//        }
-//        if ( ! $currentTransaction -> isLastTransactionPerMerchant()){
-//            $response = new Response(
-//                'Wrong transaction selected for user ',
-//                Response::HTTP_BAD_REQUEST,
-//                array('content-type' => 'application/json')
-//                );
-//            return $response;
-//        }
         
         User user = userDao.findByQrCode(qrId);
         
