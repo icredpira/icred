@@ -63,13 +63,21 @@ public class MerchantController {
 	@RequestMapping(path = "/merchant/{merchantId}/user/{qrId}/credits", method = RequestMethod.POST)
 	@ResponseBody
 	public Transaction updateLastTransaction(@PathVariable(required = true) String merchantId, @PathVariable(required = true) String qrId, HttpServletRequest request)
-			throws NotFoundException {
+			throws NotFoundException,Exception {
 	
 		// TODO: check user maerchant validity
-        
+		String newCredit = null; 
+		Long newCreditLong = null; 
+		String currentCreditId = null; 
 		
-		String newCredit = request.getParameter("newCredit");
-		String currentCreditId = request.getParameter("currentCreditId");
+		try {
+			newCredit = request.getParameter("newCredit");
+			newCreditLong = Long.parseLong(newCredit);
+			currentCreditId = request.getParameter("currentCreditId");
+		}
+		catch (Exception e){
+			throw new Exception("error in input parameters");
+		}
 	
 		
 		Transaction currentTransaction = transactionDao.findById(Long.parseLong(currentCreditId)).get(); 
@@ -107,7 +115,7 @@ public class MerchantController {
         transaction.setTransactionDate(new Date());
         transaction.setMerchantId(merchantId);
         transaction.setMerchantName(currentTransaction.getMerchantName());
-//        transaction.setInitialCredit( newCredit );
+        transaction.setInitialCredit( newCreditLong );
         transaction.setCreditUsed(false);
         transaction.setLastTransactionPerMerchant(true);
         transaction.setDummy(false);
