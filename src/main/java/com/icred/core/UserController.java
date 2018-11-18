@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,19 +53,19 @@ public class UserController {
 	 */
 	@RequestMapping(path = "/user", method = RequestMethod.POST)
 	@ResponseBody
-	public String create(@RequestParam(required = true) String email, @RequestParam(required = true) String password,
+	public ResponseEntity<User> create(@RequestParam(required = true) String email, @RequestParam(required = true) String password,
 			@RequestParam(required = true, defaultValue="") String username, @RequestParam(required = true, defaultValue=ICredConstants.CUSTOMER_USER) String userType) {
-		String userId = "";
+		User user = new User();
 		try {
-			User user = new User(email, username, password, ICredConstants.MERCHANT_USER.equals(userType) );
+			user = new User(email, username, password, ICredConstants.MERCHANT_USER.equals(userType) );
 			userDao.save(user);
-			userId = String.valueOf(user.getId());
 			user.setQrCode(generateQrCode("" + user.getId()));
 			userDao.save(user);
 		} catch (Exception ex) {
-			return "Error creating the user: " + ex.toString();
+			throw ex;
 		}
-		return "User succesfully created with id = " + userId;
+		ResponseEntity<User> response= new ResponseEntity<>(user, HttpStatus.CREATED);
+		return response;
 	}
 
 	private String generateQrCode(String userId) {
