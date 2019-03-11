@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class TransactionController {
 
-			/**
+		/**
 		 * GET /create --> Create a new user and save it in the database.
 		 */
 		@RequestMapping(path="/transaction", method=RequestMethod.GET)
